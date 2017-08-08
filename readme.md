@@ -38,6 +38,7 @@ Google Group: [ShadowsocksR](https://groups.google.com/forum/#!forum/shadowsocks
 TOX: D211FF64C848E03161700E74714A2100D363757AED4982F35486CC0713577C2F356B7DD84CAB  
 
 ### 更新记录： ###
+
 版本4.8.0 *2017-08-08*
 1.增加协议`auth_chain_c`和`auth_chain_d`具体信息见文档
 2.修复部分漏洞
