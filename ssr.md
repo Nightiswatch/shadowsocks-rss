@@ -40,9 +40,13 @@
 
 `auth_aes128_md5`或`auth_aes128_sha1`（均推荐）：对首个包的认证部分进行使用Encrypt-then-MAC模式以真正免疫认证包的CCA攻击，预防各种探测和重防攻击，同时此协议支持单端口多用户，具体设置方法参见breakwa11的博客。使用此插件的服务器与客户机的UTC时间差不能超过24小时，即只需要年份日期正确即可，针对UDP部分也有做简单的校验。此插件**不能兼容原协议**，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。
 
-`auth_chain_a`（强烈推荐）：对首个包的认证部分进行使用Encrypt-then-MAC模式以真正免疫认证包的CCA攻击，预防各种探测和重防攻击，数据流自带RC4加密，同时此协议支持单端口多用户，不同用户之间无法解密数据，每次加密密钥均不相同，具体设置方法参见breakwa11的博客。使用此插件的服务器与客户机的UTC时间差不能超过24小时，即只需要年份日期正确即可，针对UDP部分也有加密及长度混淆。使用此插件建议加密使用none。此插件**不能兼容原协议**，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数，最小值支持直接设置为1，此插件能实时响应实际的客户端数量（你的客户端至少有一个连接没有断开才能保证你占用了一个客户端数，否则设置为1时其它客户端一连接别的就一定连不上）。
+`auth_chain_a`（推荐）：对首个包的认证部分进行使用Encrypt-then-MAC模式以真正免疫认证包的CCA攻击，预防各种探测和重防攻击，数据流自带RC4加密，同时此协议支持单端口多用户，不同用户之间无法解密数据，每次加密密钥均不相同，具体设置方法参见breakwa11的博客。使用此插件的服务器与客户机的UTC时间差不能超过24小时，即只需要年份日期正确即可，针对UDP部分也有加密及长度混淆。使用此插件建议加密使用none。此插件**不能兼容原协议**，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数，最小值支持直接设置为1，此插件能实时响应实际的客户端数量（你的客户端至少有一个连接没有断开才能保证你占用了一个客户端数，否则设置为1时其它客户端一连接别的就一定连不上）。
 
-`auth_chain_b`（强烈推荐）：与`auth_chain_a`几乎一样，但TCP部分采用特定模式的数据包分布（模式由密码决定），使得看起来像一个实实在在的协议，使数据包分布分析和熵分析难以发挥作用。如果你感觉当前的模式可能被识别，那么你只要简单的更换密码就解决问题了。此协议为测试版本协议，**不能兼容原协议**。
+`auth_chain_b`（推荐）：与`auth_chain_a`几乎一样，但TCP部分采用特定模式的数据包分布（模式由密码决定），使得看起来像一个实实在在的协议，使数据包分布分析和熵分析难以发挥作用。如果你感觉当前的模式可能被识别，那么你只要简单的更换密码就解决问题了。此协议为测试版本协议，**不能兼容原协议**。
+
+`auth_chain_c`（推荐）：与`auth_chain_b`相比，尽力使得数据包长度分布归属到模式中，让包分布看起来更规整。但此版本与`auth_chain_b`相比对带宽有更多的浪费。
+
+`auth_chain_d`（推荐）：与`auth_chain_c`相比，在一定程度上增加了各种密码生成的模式的最大适用长度，这样就不需要在极端情况下再临时生成随机数，降低大包传输时的计算量，提高下载极限速度。
 
 推荐使用`auth_chain_*`系列插件，在以上插件里混淆能力较高，而抗检测能力最高，即使多人使用也难以识别封锁。同时如果要发布公开代理，以上auth插件均可严格限制使用客户端数（要注意的是若为`auth_sha1_v4_compatible`，那么用户只要使用原协议就没有限制效果），而`auth_chain_*`协议的限制最为精确。
 
@@ -79,7 +83,9 @@
 | auth_aes128_md5 |  0 |  80%  |  70%/98%  |    Yes   |    Yes   |    Yes    |     10     |
 | auth_aes128_sha1 | 0 |  70%  |  70%/98%  |    Yes   |    Yes   |    Yes    |     10     |
 | auth_chain_a   |  0  |  70%  |  75%/98%  |    Yes   |    Yes   |    Yes    |     15     |
-| auth_chain_b   |  0  |  70%  |  70%/98%  |    Yes   |    Yes   |    Yes    |     20     |
+| auth_chain_b   |  0  |  68%  |  70%/98%  |    Yes   |    Yes   |    Yes    |     20     |
+| auth_chain_c   |  0  |  69%  |  70%/98%  |    Yes   |    Yes   |    Yes    |     20     |
+| auth_chain_d   |  0  |  70%  |  70%/98%  |    Yes   |    Yes   |    Yes    |     20     |
 
 说明：
 
@@ -105,7 +111,7 @@
 -  如果你发现你的代理突然不能用了，但换一个端口又能用了，或者等15分钟到半小时后又能用了，这种情况下请联系我
 
 ## 配置方法 ##
-服务端配置：使用最新[SSR的manyuser](https://github.com/breakwa11/shadowsocks/tree/manyuser)分支  
+服务端配置：使用最新[SSR的manyuser](https://github.com/readour/shadowsocksr/tree/manyuser)分支  
 user-config.json或config.json里有一个protocol的字段，目前的可能取值为：  
 `origin`  
 `verify_deflate` （不建议）  
@@ -257,4 +263,4 @@ interface IObfs
 
 如果编写的部分仅含客户端部分，那么只需要编写Client为前缀的两个接口，服务端同理。
 
-目前支持此插件接口的，有 [ShadowsocksR C#](https://github.com/shadowsocksr/shadowsocksr-csharp/releases) 和 [ShadowsocksR Python](https://github.com/shadowsocksr/shadowsocks/tree/manyuser)
+目前支持此插件接口的，有 [ShadowsocksR C#](https://github.com/readour/shadowsocksr-csharp/releases) 和 [ShadowsocksR Python](https://github.com/readour/shadowsocksr/tree/manyuser)
