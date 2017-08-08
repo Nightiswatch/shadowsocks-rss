@@ -26,7 +26,7 @@ Fingerping: DD98 A7DF DDCD B5AD D6F6  A17B 602A 81C9 F82F A47C
 3. 连接管理，随时断开指定节点的连接，或修改节点后自动断开
 4. 协议转换，把UDP包封装于TCP里发送
 5. 多重代理，通过设置前置socks5/http代理，可达到任意重代理
-6. 协议插件，支持自定义协议和协议混淆，详见[ShadowsocksR插件文档 <<== 要了解插件的点这里看](https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md)
+6. 协议插件，支持自定义协议和协议混淆，详见[ShadowsocksR插件文档 <<== 要了解插件的点这里看](https://github.com/readour/shadowsocks-rss/blob/master/ssr.md)
 
 你要是有兴趣和我联系的话，特别是编程技术上的支持，那就到  
 Twitter: [@breakwa11](https://twitter.com/breakwa11)  
@@ -38,6 +38,10 @@ Google Group: [ShadowsocksR](https://groups.google.com/forum/#!forum/shadowsocks
 TOX: D211FF64C848E03161700E74714A2100D363757AED4982F35486CC0713577C2F356B7DD84CAB  
 
 ### 更新记录： ###
+版本4.8.0 *2017-08-08*
+1.增加协议`auth_chain_c`和`auth_chain_d`具体信息见文档
+2.修复部分漏洞
+
 版本4.7.0 *2017-07-27*  
 1.增加协议`auth_chain_b`，具体特性参见协议文档  
 2.修正部分内存泄露  
